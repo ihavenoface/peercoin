@@ -26,7 +26,7 @@ print-%: FORCE
 #   MAKEFLAGS
 #
 # this means that sub-makes will be invoked as if:
-#   $(MAKE) A=1 blah blah
+#   $(MAKE) A=1 blah bla
 MAKEOVERRIDES := $(filter V=%,$(MAKEOVERRIDES))
 SOURCES_PATH ?= $(BASEDIR)/sources
 WORK_PATH = $(BASEDIR)/work
