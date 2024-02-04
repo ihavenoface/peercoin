@@ -13,6 +13,9 @@ on:
 jobs:
   binary:
     runs-on: ubuntu-22.04
+    container:
+      image: alpine:3.19
+      options: --privileged
     strategy:
       matrix:
         name:
@@ -38,7 +41,7 @@ jobs:
 
       - name: Build Binaries
         id: build
-        uses: ./.github/workflows/binary/
+        uses: ./.github/workflows/binary
       - run: ls ${{ steps.build.outputs.outdir }}
 
       - name: Get short SHA
