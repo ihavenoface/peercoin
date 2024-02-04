@@ -36,7 +36,4 @@ jobs:
       - name: Build Stuff
         id: build
         uses: ./.github/workflows/binary/
-        with:
-          host: ${{ matrix.name }}
-          substitute_urls: ${{ env.substitute_urls }}
       - run: ls ${{ steps.build.outputs.outdir }}
