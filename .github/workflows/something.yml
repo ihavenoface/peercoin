@@ -18,6 +18,7 @@ jobs:
         name:
           - x86_64-linux-gnu
     env:
+      FORCE_DIRTY_WORKTREE: true
       SUBSTITUTE_URLS: https://ci.guix.gnu.org
       HOSTS: ${{ matrix.name }}
       xcode_target: /tmp/xcode.tar.gz
@@ -25,6 +26,7 @@ jobs:
       xcode_checksum: df75d30ecafc429e905134333aeae56ac65fac67cb4182622398fd717df77619
     steps:
       - uses: actions/checkout@v4
+
       - name: Fetch OSX SDK
         if: ${{ matrix.name == 'x86_64-apple-darwin' || matrix.name == 'arm64-apple-darwin' }}
         run: |
@@ -33,7 +35,28 @@ jobs:
           mkdir depends/SDKs
           tar -C depends/SDKs -xaf ${xcode_target}
           rm ${xcode_target}
-      - name: Build Stuff
+
+      - name: Build Binaries
         id: build
         uses: ./.github/workflows/binary/
       - run: ls ${{ steps.build.outputs.outdir }}
+
+      - name: Get short SHA
+        id: slug
+        run: echo "sha8=$(echo ${{ github.sha }} | cut -c1-8)" >> $GITHUB_OUTPUT
+
+      - name: Copy artifacts
+        run: cp -r ${{ steps.build.outputs.outdir }}/* ${PWD}/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: peercoin-${{ steps.slug.outputs.sha8 }}-${{ matrix.name }}
+          path: |
+            *.tar.gz
+            *.zip
+            *.exe
+            *.dmg
+            !*-debug*
+            !*-unsigned.tar.gz
+          retention-days: 5
+          if-no-files-found: error
