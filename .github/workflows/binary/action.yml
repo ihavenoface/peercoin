@@ -1,11 +1,5 @@
 name: Build Stuff
 
-inputs:
-  host:
-    required: true
-  substitute_urls:
-    required: true
-
 outputs:
   outdir:
     description: Target dir of resulting binaries.
