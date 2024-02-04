@@ -1,0 +1,40 @@
+name: Continuous Integration
+
+on:
+  push:
+    paths-ignore:
+      - '**/*.md'
+  pull_request:
+    paths-ignore:
+      - 'doc/**'
+      - 'contrib/**'
+      - '**/*.md'
+
+jobs:
+  binary:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        name:
+          - x86_64-linux-gnu
+    env:
+      substitute_urls: https://ci.guix.gnu.org
+      xcode_target: /tmp/xcode.tar.gz
+      xcode_download_path: https://bitcoincore.org/depends-sources/sdks/Xcode-12.2-12B45b-extracted-SDK-with-libcxx-headers.tar.gz
+      xcode_checksum: df75d30ecafc429e905134333aeae56ac65fac67cb4182622398fd717df77619
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch OSX SDK
+        if: ${{ matrix.name == 'x86_64-apple-darwin' || matrix.name == 'arm64-apple-darwin' }}
+        run: |
+          wget -q -O ${xcode_target} ${xcode_download_path}
+          echo "${xcode_checksum} ${xcode_target}" | sha256sum -c
+          mkdir depends/SDKs
+          tar -C depends/SDKs -xaf ${xcode_target}
+          rm ${xcode_target}
+      - id: build
+        uses: ./.github/workflows/binary/
+        with:
+          host: ${{ matrix.name }}
+          substitute_urls: ${{ env.substitute_urls }}
+      - run: ls ${{ steps.build.outputs.outdir }}

@@ -1,0 +1,14 @@
+name: Build Stuff
+
+inputs:
+  host:
+    required: true
+  substitute_urls:
+    required: true
+
+outputs:
+  outdir:
+
+runs:
+  using: docker
+  image: Dockerfile
