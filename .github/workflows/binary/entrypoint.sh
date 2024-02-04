@@ -4,4 +4,4 @@
 git config --global --add safe.directory ${GITHUB_WORKSPACE}
 ./contrib/guix/guix-build
 source "contrib/guix/libexec/prelude.bash"
-echo "outdir=${OUTDIR_BASE:-${VERSION_BASE}/output}/${INPUT_HOST}" >> $GITHUB_OUTPUT
+echo "outdir=${OUTDIR_BASE:-${VERSION_BASE}/output}/${HOSTS}" >> $GITHUB_OUTPUT

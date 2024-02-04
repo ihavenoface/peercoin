@@ -29,6 +29,7 @@ jobs:
       xcode_checksum: df75d30ecafc429e905134333aeae56ac65fac67cb4182622398fd717df77619
     steps:
       - uses: actions/checkout@v4
+      - run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
 
       - name: Fetch OSX SDK
         if: ${{ matrix.name == 'x86_64-apple-darwin' || matrix.name == 'arm64-apple-darwin' }}
