@@ -8,6 +8,7 @@ inputs:
 
 outputs:
   outdir:
+    description: Target dir of resulting binaries.
 
 runs:
   using: docker
