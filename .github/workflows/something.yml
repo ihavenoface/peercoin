@@ -28,6 +28,7 @@ jobs:
       xcode_download_path: https://bitcoincore.org/depends-sources/sdks/Xcode-12.2-12B45b-extracted-SDK-with-libcxx-headers.tar.gz
       xcode_checksum: df75d30ecafc429e905134333aeae56ac65fac67cb4182622398fd717df77619
     steps:
+      - run: apk add git
       - uses: actions/checkout@v4
       - run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
 
