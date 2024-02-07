@@ -93,7 +93,9 @@ jobs:
         env:
           cache-name: depends
         with:
-          path: depends/built/${{ matrix.host }}
+          path: |
+            depends/built/
+            depends/work/
           key: ${{ matrix.name }}-${{ env.cache-name }}-${{ hashFiles('depends/packages/*') }}
 
       - name: Cache guix
@@ -102,8 +104,16 @@ jobs:
           cache-name: guix
         with:
           path: |
-            /root/.cache/guix
-            /gnu/store
+            /var/guix/
+            /var/log/guix/
+            /gnu/
+            /etc/guix/
+            /home/*/.config/guix/
+            /home/*/.cache/guix/
+            /home/*/.guix-profile/
+            /root/.config/guix/
+            /root/.cache/guix/
+            /root/.guix-profile/
           key: ${{ env.cache-name }}-${{ hashFiles('contrib/guix/manifest.scm') }}
 
       - name: Fetch OSX SDK
