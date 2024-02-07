@@ -90,13 +90,9 @@ jobs:
       - run: apk add tar
       - name: Cache dependencies
         uses: actions/cache@v4
-        env:
-          cache-name: depends
         with:
-          path: |
-            depends/built/
-            depends/work/
-          key: ${{ matrix.name }}-${{ env.cache-name }}-${{ hashFiles('depends/packages/*') }}
+          path: depends/built/
+          key: depends-built-${{ matrix.name }}-${{ hashFiles('depends/packages/*') }}
 
       - name: Cache guix
         uses: actions/cache@v4
