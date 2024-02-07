@@ -96,8 +96,6 @@ jobs:
 
       - name: Cache guix
         uses: actions/cache@v4
-        env:
-          cache-name: guix
         with:
           path: |
             /var/guix/
@@ -110,7 +108,7 @@ jobs:
             /root/.config/guix/
             /root/.cache/guix/
             /root/.guix-profile/
-          key: ${{ env.cache-name }}-${{ hashFiles('contrib/guix/manifest.scm') }}
+          key: guix-${{ hashFiles('contrib/guix/**') }}
 
       - name: Fetch OSX SDK
         if: ${{ matrix.name == 'x86_64-apple-darwin' || matrix.name == 'arm64-apple-darwin' }}
