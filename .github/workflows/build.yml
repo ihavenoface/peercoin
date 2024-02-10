@@ -99,19 +99,12 @@ jobs:
         id: guix-base-cache
         with:
           path: |
-            /var/guix/
-            /var/log/guix/
-            /gnu/
-            /etc/guix/
-            /home/*/.config/guix/
-            /home/*/.cache/guix/
-            /home/*/.guix-profile/
-            /root/.config/guix/
-            /root/.cache/guix/
-            /root/.guix-profile/
+            /var/guix
+            /gnu
+            /etc/guix
           key: guix-${{ hashFiles('contrib/guix/**') }}
 
-      - run: find /var/guix /var/log/guix /gnu /etc/guix /home/*/.config/guix /home/*/.cache/guix /home/*/.guix-profile /root/.config/guix /root/.cache/guix /root/.guix-profile -type f > /tmp/a.txt
+      - run: find /var/guix /gnu /etc/guix -type f > /tmp/a.txt
         if: steps.guix-base-cache.outputs.cache-hit == 'true'
 
       - name: Fetch OSX SDK
@@ -129,7 +122,8 @@ jobs:
 
       - run: guix-daemon --build-users-group=guixbuild & ./contrib/guix/guix-build
 
-      - run: find /var/guix /var/log/guix /gnu /etc/guix /home/*/.config/guix /home/*/.cache/guix /home/*/.guix-profile /root/.config/guix /root/.cache/guix /root/.guix-profile -type f > /tmp/b.txt
+      - run: find /var/guix /gnu /etc/guix -type f > /tmp/b.txt
+        if: steps.guix-base-cache.outputs.cache-hit == 'true'
 
       - run: diff -u /tmp/a.txt /tmp/b.txt | tail -n +4 | grep '^\+' | sed 's/^+//' > /tmp/res.txt
         if: steps.guix-base-cache.outputs.cache-hit == 'true'
