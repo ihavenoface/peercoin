@@ -131,8 +131,10 @@ jobs:
 
       - run: find /var/guix /var/log/guix /gnu /etc/guix /home/*/.config/guix /home/*/.cache/guix /home/*/.guix-profile /root/.config/guix /root/.cache/guix /root/.guix-profile -type f > /tmp/b.txt
 
-      - run: diff -u /tmp/original_file_list.txt /tmp/new_file_list.txt | tail -n +4 | grep '^\+' | sed 's/^+//' > /tmp/res.txt
+      - run: diff -u /tmp/a.txt /tmp/b.txt | tail -n +4 | grep '^\+' | sed 's/^+//' > /tmp/res.txt
+        if: steps.guix-base-cache.outputs.cache-hit == 'true'
       - run: cat /tmp/res.txt
+        if: steps.guix-base-cache.outputs.cache-hit == 'true'
 
       - shell: bash
         id: detect-outdir
