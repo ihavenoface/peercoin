@@ -96,6 +96,7 @@ jobs:
 
       - name: Cache guix
         uses: actions/cache@v4
+        id: guix-base-cache
         with:
           path: |
             /var/guix/
@@ -109,6 +110,9 @@ jobs:
             /root/.cache/guix/
             /root/.guix-profile/
           key: guix-${{ hashFiles('contrib/guix/**') }}
+
+      - run: find /var/guix /var/log/guix /gnu /etc/guix /home/*/.config/guix /home/*/.cache/guix /home/*/.guix-profile /root/.config/guix /root/.cache/guix /root/.guix-profile -type f > /tmp/a.txt
+        if: steps.guix-base-cache.outputs.cache-hit == 'true'
 
       - name: Fetch OSX SDK
         if: ${{ matrix.name == 'x86_64-apple-darwin' || matrix.name == 'arm64-apple-darwin' }}
@@ -124,6 +128,11 @@ jobs:
           tar -C depends/SDKs -xaf /tmp/xcode.tar.gz
 
       - run: guix-daemon --build-users-group=guixbuild & ./contrib/guix/guix-build
+
+      - run: find /var/guix /var/log/guix /gnu /etc/guix /home/*/.config/guix /home/*/.cache/guix /home/*/.guix-profile /root/.config/guix /root/.cache/guix /root/.guix-profile -type f > /tmp/b.txt
+
+      - run: diff -u /tmp/original_file_list.txt /tmp/new_file_list.txt | tail -n +4 | grep '^\+' | sed 's/^+//' > /tmp/res.txt
+      - run: cat /tmp/res.txt
 
       - shell: bash
         id: detect-outdir
