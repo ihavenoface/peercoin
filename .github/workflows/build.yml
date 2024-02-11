@@ -40,7 +40,6 @@ jobs:
           - os: osx
           - os: osx
     steps:
-      - uses: actions/checkout@v4
       - name: Cache guix
         id: warm-guix-cache
         uses: actions/cache/restore@v4
@@ -54,6 +53,10 @@ jobs:
       #- run: make -C depends download-${{ matrix.os }}
       - run: apt-get update && apt-get install -y guix build-essential make wget git bzip2 ca-certificates curl zstd
         if: steps.warm-guix-cache.outputs.cache-hit != 'true'
+      - uses: actions/checkout@v4
+        if: steps.warm-guix-cache.outputs.cache-hit != 'true'
+      - run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
+        if: steps.warm-guix-cache.outputs.cache-hit != 'true'
       - name: Fetch OSX SDK
         if: ${{ matrix.os == 'osx' && steps.warm-guix-cache.outputs.cache-hit != 'true' }}
         working-directory: /tmp
@@ -65,8 +68,6 @@ jobs:
         run: |
           mkdir depends/SDKs
           tar -C depends/SDKs -xaf /tmp/xcode.tar.gz
-      - run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
-        if: steps.warm-guix-cache.outputs.cache-hit != 'true'
       - run: guix-daemon --build-users-group=_guixbuild & ./contrib/guix/guix-build
         if: steps.warm-guix-cache.outputs.cache-hit != 'true'
       - uses: actions/upload-artifact@v4
