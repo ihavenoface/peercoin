@@ -105,6 +105,7 @@ jobs:
         if: steps.warm-guix-cache.outputs.cache-hit != 'true'
   binary:
     runs-on: ubuntu-22.04
+    needs: [merge_caches]
     container:
       image: alpine:3.19
       options: --privileged
