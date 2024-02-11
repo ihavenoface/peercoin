@@ -41,7 +41,6 @@ jobs:
           - os: osx
     steps:
       - uses: actions/checkout@v4
-      - run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
       - name: Cache guix
         id: warm-guix-cache
         uses: actions/cache/restore@v4
@@ -66,6 +65,7 @@ jobs:
         run: |
           mkdir depends/SDKs
           tar -C depends/SDKs -xaf /tmp/xcode.tar.gz
+      - run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
       - run: guix-daemon --build-users-group=_guixbuild & ./contrib/guix/guix-build
         if: steps.cache.outputs.cache-hit != 'true'
       - uses: actions/upload-artifact@v4
