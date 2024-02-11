@@ -78,11 +78,21 @@ jobs:
   merge_caches:
     runs-on: ubuntu-22.04
     needs: [warm_caches]
-    if: steps.warm-guix-cache.outputs.cache-hit != 'true'
     steps:
+      - name: Cache guix
+        id: warm-guix-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            /gnu
+            /var/guix
+          key: |
+            guix-${{ hashFiles('contrib/guix/**') }}
+          lookup-only: true
       - uses: actions/download-artifact@v4
         with:
           merge-multiple: true
+        if: steps.warm-guix-cache.outputs.cache-hit != 'true'
       - name: Cache guix
         id: cache
         uses: actions/cache/save@v4
@@ -92,6 +102,7 @@ jobs:
             /var/guix
           key: |
             guix-${{ hashFiles('contrib/guix/**') }}
+        if: steps.warm-guix-cache.outputs.cache-hit != 'true'
   binary:
     runs-on: ubuntu-22.04
     container:
