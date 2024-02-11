@@ -457,7 +457,7 @@ EOF
                                         DISTSRC="$(DISTSRC_BASE=/distsrc-base && distsrc_for_host "$HOST")" \
                                         OUTDIR="$(OUTDIR_BASE=/outdir-base && outdir_for_host "$HOST")" \
                                         DIST_ARCHIVE_BASE=/outdir-base/dist-archive \
-                                      bash -c "cd /peercoin && bash contrib/guix/libexec/build.sh"
+                                      bash -c "[ -z $YES_BUILD ] && cd /peercoin && bash contrib/guix/libexec/build.sh"
     )
 
 done
