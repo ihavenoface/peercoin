@@ -107,6 +107,7 @@ jobs:
       - run: find /gnu /etc/guix /var/guix -type f | sort -u > /tmp/base-cache.txt
         if: steps.guix-base-cache.outputs.cache-hit == 'true'
       - run: cat /tmp/base-cache.txt
+        if: steps.guix-base-cache.outputs.cache-hit == 'true'
 
       - name: Cache guix delta
         if: steps.guix-base-cache.outputs.cache-hit == 'true'
