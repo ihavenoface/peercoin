@@ -58,11 +58,11 @@ jobs:
         id: detect-os
         run: |
           OS=unknown
-          if [[ ${{ matrix.name }} == "x86_64-w64-mingw32" ]]; then
+          if [[ "${{ matrix.name }}" == "x86_64-w64-mingw32" ]]; then
             OS=w64
-          elif [[ ${{ matrix.name }} =~ "-linux-" ]]; then
+          elif [[ "${{ matrix.name }}" =~ "-linux-" ]]; then
             OS=linux
-          elif [[ ${{ matrix.name }} == *"darwin"* ]]; then
+          elif [[ "${{ matrix.name }}" == *"darwin"* ]]; then
             OS=darwin
           fi
           echo "os=$OS" >> $GITHUB_OUTPUT
