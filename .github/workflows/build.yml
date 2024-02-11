@@ -99,9 +99,9 @@ jobs:
         id: guix-base-cache
         with:
           path: |
+            /var/guix
             /gnu
             /etc/guix
-            /var/guix
           key: guix-${{ hashFiles('contrib/guix/**') }}
 
       - run: find /gnu /etc/guix /var/guix -type f | sort -u > /tmp/base-cache.txt
