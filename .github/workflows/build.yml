@@ -137,6 +137,7 @@ jobs:
 
       - run: while IFS= read -r file; do rm "$file"; done << $(cat /tmp/base-cache.txt)
         if: steps.guix-base-cache.outputs.cache-hit == 'true'
+        shell: bash
 
       - shell: bash
         id: detect-outdir
