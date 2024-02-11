@@ -54,6 +54,20 @@ jobs:
           make
           shadow
 
+      - name: Detect OS type
+        id: detect-os
+        run: |
+          OS=unknown
+          if [[ ${{ matrix.name }} == "x86_64-w64-mingw32" ]]; then
+            OS=w64
+          elif [[ ${{ matrix.name }} =~ "-linux-" ]]; then
+            OS=linux
+          elif [[ ${{ matrix.name }} == *"darwin"* ]]; then
+            OS=darwin
+          fi
+          echo "os=$OS" >> $GITHUB_OUTPUT
+        shell: bash
+
       - name: Set up guix
         run: |
           guix_file_name=guix-binary-${guix_version}.$(uname -m)-linux.tar.xz
@@ -99,14 +113,12 @@ jobs:
         id: guix-base-cache
         with:
           path: |
-            /var/guix
             /gnu
             /etc/guix
-          key: guix-${{ hashFiles('contrib/guix/**') }}
+            /var/guix
+          key: guix-base-${{ hashFiles('contrib/guix/**') }}
 
-      - run: find /gnu /etc/guix /var/guix -type f | sort -u > /tmp/base-cache.txt
-        if: steps.guix-base-cache.outputs.cache-hit == 'true'
-      - run: cat /tmp/base-cache.txt
+      - run: find /gnu /etc/guix /var/guix -type f | sort -u > /tmp/guix-base-cache.txt
         if: steps.guix-base-cache.outputs.cache-hit == 'true'
 
       - name: Cache guix delta
@@ -118,24 +130,24 @@ jobs:
             /gnu
             /etc/guix
             /var/guix
-          key: guix-delta-${{ matrix.name }}-${{ hashFiles('contrib/guix/**') }}
+          key: guix-delta-${{ steps.detect-os.outputs.os }}-${{ hashFiles('contrib/guix/**') }}
 
       - name: Fetch OSX SDK
-        if: ${{ matrix.name == 'x86_64-apple-darwin' || matrix.name == 'arm64-apple-darwin' }}
+        if: ${{ steps.detect-os.outputs.os == 'darwin' }}
         working-directory: /tmp
         run: |
           wget -q -O xcode.tar.gz ${xcode_download_path}
           echo "${xcode_checksum} xcode.tar.gz" | sha256sum -c
 
       - name: Extract OSX SDK
-        if: ${{ matrix.name == 'x86_64-apple-darwin' || matrix.name == 'arm64-apple-darwin' }}
+        if: ${{ steps.detect-os.outputs.os == 'darwin' }}
         run: |
           mkdir depends/SDKs
           tar -C depends/SDKs -xaf /tmp/xcode.tar.gz
 
       - run: guix-daemon --build-users-group=guixbuild & ./contrib/guix/guix-build
 
-      - run: while IFS= read -r file; do rm "$file"; done << $(cat /tmp/base-cache.txt)
+      - run: while IFS= read -r file; do rm "$file"; done <<< $(cat /tmp/guix-base-cache.txt)
         if: steps.guix-base-cache.outputs.cache-hit == 'true'
         shell: bash
 
