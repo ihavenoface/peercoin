@@ -41,6 +41,7 @@ jobs:
           - os: osx
     steps:
       - uses: actions/checkout@v4
+      - run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
       - name: Cache guix
         id: warm-guix-cache
         uses: actions/cache/restore@v4
