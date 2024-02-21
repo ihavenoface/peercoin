@@ -24,3 +24,4 @@ indent_style = tab
 # Autoconf scripts
 [configure.ac]
 indent_size = 2
+
