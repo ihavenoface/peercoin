@@ -83,7 +83,9 @@ RUN --security=insecure guix-daemon --build-users-group=guixbuild & \
                                      --fallback \
                                      --link-profile \
                                      --substitute-urls=$substitute_urls \
-                                     -- env SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:?unable to determine value}"
+                                     -- env HOST="${HOST}" \
+                                            JOBS="${JOBS}" \
+                                            SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}"
 
 FROM guix-base AS guix-host
 
@@ -107,4 +109,4 @@ RUN --security=insecure guix-daemon --build-users-group=guixbuild & \
                                      --substitute-urls=$substitute_urls \
                                      -- env HOST="${HOST}" \
                                             JOBS="${JOBS}" \
-                                            SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:?unable to determine value}"
+                                            SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}"
