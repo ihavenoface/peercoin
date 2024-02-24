@@ -65,6 +65,8 @@ ARG substitute_urls="https://ci.guix.gnu.org"
 ARG JOBS
 ENV JOBS="${JOBS}"
 ENV HOST=nil
+ARG SOURCE_DATE_EPOCH
+ENV SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}"
 RUN --security=insecure guix-daemon --build-users-group=guixbuild & \
     guix time-machine --url=https://git.savannah.gnu.org/git/guix.git \
                       --commit=$time_machine_commit \
@@ -82,7 +84,8 @@ RUN --security=insecure guix-daemon --build-users-group=guixbuild & \
                                      --link-profile \
                                      --substitute-urls=$substitute_urls \
                                      -- env HOST="${HOST}" \
-                                            JOBS="${JOBS}"
+                                            JOBS="${JOBS}" \
+                                            SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:?unable to determine value}"
 
 FROM guix-base AS guix-host
 
@@ -105,4 +108,5 @@ RUN --security=insecure guix-daemon --build-users-group=guixbuild & \
                                      --link-profile \
                                      --substitute-urls=$substitute_urls \
                                      -- env HOST="${HOST}" \
-                                            JOBS="${JOBS}"
+                                            JOBS="${JOBS}" \
+                                            SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:?unable to determine value}"

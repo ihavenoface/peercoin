@@ -51,6 +51,7 @@ jobs:
           --tag ghcr.io/${{ github.repository }}/ci-tools/guix-base:${{ steps.detect.outputs.tag-hash }}
           --build-arg BUILDKIT_INLINE_CACHE=1
           --build-arg JOBS="${JOBS}"
+          --build-arg SOURCE_DATE_EPOCH="$(git -c log.showSignature=false log --format=%at -1 -- contrib/guix)"
           --cache-from "type=registry,ref=ghcr.io/peercoin/peercoin/ci-tools/guix-base:${{ steps.detect.outputs.tag-hash }}-cache"
           --cache-from "type=registry,ref=ghcr.io/${{ github.repository }}/ci-tools/guix-base:${{ steps.detect.outputs.tag-hash }}-cache"
           --cache-to "type=registry,ref=ghcr.io/${{ github.repository }}/ci-tools/guix-base:${{ steps.detect.outputs.tag-hash }}-cache"
@@ -89,6 +90,7 @@ jobs:
           --build-arg HOST=${{ matrix.name }}
           --build-arg BUILDKIT_INLINE_CACHE=1
           --build-arg JOBS="${JOBS}"
+          --build-arg SOURCE_DATE_EPOCH="$(git -c log.showSignature=false log --format=%at -1 -- contrib/guix)"
           --cache-from "type=registry,ref=ghcr.io/peercoin/peercoin/ci-tools/guix-base:${{ needs.guix-base.outputs.tag-hash }}-cache"
           --cache-from "type=registry,ref=ghcr.io/peercoin/peercoin/ci-tools/guix-host:${{ needs.guix-base.outputs.tag-hash }}-${{ matrix.name }}-cache"
           --cache-from "type=registry,ref=ghcr.io/${{ github.repository }}/ci-tools/guix-base:${{ needs.guix-base.outputs.tag-hash }}-cache"
