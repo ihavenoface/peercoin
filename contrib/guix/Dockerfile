@@ -110,3 +110,5 @@ RUN --security=insecure guix-daemon --build-users-group=guixbuild & \
                                      -- env HOST="${HOST}" \
                                             JOBS="${JOBS}" \
                                             SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}"
+
+ENV SOURCE_DATE_EPOCH=
