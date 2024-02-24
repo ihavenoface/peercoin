@@ -67,6 +67,7 @@ ENV JOBS="${JOBS}"
 ENV HOST=nil
 ARG SOURCE_DATE_EPOCH
 ENV SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}"
+RUN echo ${SOURCE_DATE_EPOCH}
 RUN --security=insecure guix-daemon --build-users-group=guixbuild & \
     guix time-machine --url=https://git.savannah.gnu.org/git/guix.git \
                       --commit=$time_machine_commit \
