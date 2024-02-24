@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.6
+# syntax=docker/dockerfile:1.6-labs
 FROM alpine:3.19 AS guix
 
 RUN apk --no-cache --update add \
