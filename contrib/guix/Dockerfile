@@ -59,7 +59,7 @@ COPY patches patches
 
 FROM guix AS guix-base
 
-ARG time_machine_commit=998eda3067c7d21e0d9bb3310d2f5a14b8f1c681
+ARG time_machine_commit=d5ca4d4fd713a9f7e17e074a1e37dda99bbb09fc
 ARG substitute_urls="https://ci.guix.gnu.org"
 
 ARG JOBS
