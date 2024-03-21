@@ -72,17 +72,17 @@ RUN --security=insecure guix-daemon --build-users-group=guixbuild & \
                       --keep-failed \
                       --fallback \
                       --substitute-urls=$substitute_urls \
-                      -- environment --manifest="${PWD}/manifest.scm" \
-                                     --container \
-                                     --pure \
-                                     --no-cwd \
-                                     --cores="${JOBS}" \
-                                     --keep-failed \
-                                     --fallback \
-                                     --link-profile \
-                                     --substitute-urls=$substitute_urls \
-                                     -- env HOST="${HOST}" \
-                                            JOBS="${JOBS}"
+                      -- shell --manifest="${PWD}/manifest.scm" \
+                               --container \
+                               --pure \
+                               --no-cwd \
+                               --cores="${JOBS}" \
+                               --keep-failed \
+                               --fallback \
+                               --link-profile \
+                               --substitute-urls=$substitute_urls \
+                               -- env HOST="${HOST}" \
+                                      JOBS="${JOBS}"
 
 FROM guix-base AS guix-host
 
@@ -95,14 +95,14 @@ RUN --security=insecure guix-daemon --build-users-group=guixbuild & \
                       --keep-failed \
                       --fallback \
                       --substitute-urls=$substitute_urls \
-                      -- environment --manifest="${PWD}/manifest.scm" \
-                                     --container \
-                                     --pure \
-                                     --no-cwd \
-                                     --cores="${JOBS}" \
-                                     --keep-failed \
-                                     --fallback \
-                                     --link-profile \
-                                     --substitute-urls=$substitute_urls \
-                                     -- env HOST="${HOST}" \
-                                            JOBS="${JOBS}"
+                      -- shell --manifest="${PWD}/manifest.scm" \
+                               --container \
+                               --pure \
+                               --no-cwd \
+                               --cores="${JOBS}" \
+                               --keep-failed \
+                               --fallback \
+                               --link-profile \
+                               --substitute-urls=$substitute_urls \
+                               -- env HOST="${HOST}" \
+                                   JOBS="${JOBS}"
